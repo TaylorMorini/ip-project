@@ -1,1 +1,22 @@
 
+[{
+	"details": "MIS 479, Professor Kumar",
+  "location": "Business 207",
+	"start": "13: 00: 00",
+	"end": "14: 15: 00",
+	"order": 1
+},
+ {
+	"details":"IST 402, Professor Ollendyke",
+  "location": "Wartik 108",
+	"start": "12: 05: 00",
+	"end": "13: 20: 00", 
+  "order": 2
+ },
+ {
+  "details":"KINES 82, Professor Boccumini",
+  "location": "Online",
+	"start": "15: 05: 00",
+	"end": "16: 20: 00", 
+  "order": 3
+}]
