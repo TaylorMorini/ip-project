@@ -19,6 +19,8 @@ export class UserIP extends LitElement {
     // default values
     this.ip = null;
     this.location = null;
+    this.city = null;
+    this.region = null;
     // variables can be stored on "this" as the class we're working on is like a
     // Java or other Object Oriented Programming Language
     // so for this one, we're storing a reference to the API endpoint
@@ -105,7 +107,6 @@ export class UserIP extends LitElement {
         return false;
       })
       .then(data => {
-        // this works for the location, but the map is not accurate??
         this.ip = data.ip;
         this.city = data.city;
         this.country = data.country;
