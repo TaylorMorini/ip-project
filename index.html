@@ -13,56 +13,38 @@
       padding: 50px;
       font-family: sans-serif;
     }
-    hello-world {
-      border: 10px solid black;
-    }
-    hello-world[name="cool"] {
-      color: orange;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-    user-ip[ip="24.48.0.1"] {
-      background-color: orange;
-    }
+
+    
+
+  
   </style>
-  <title>Project one: </title>
+  <title>NASA Image Search</title>
 </head>
 
 <body>
-  <h1>Hello Worlds tags</h1>
-  <hello-world name="cool"></hello-world>
-  <hello-world name="Jeb"><p>Please clap..</p></hello-world>
-  <hello-world name="partner"></hello-world>
+
+  <h1>NASA Image Search</h1>
+  <nasa-image-search id ="search1" view ="list"></nasa-image-search>
+  <button id = "search">Search Images</button>
+  <button id = "reset">Reset Data</button>
   <script type="module">
-    import "./src/HelloWorld.js";
+    import "./src/nasa-image.js";
+
+    document.querySelector("#search").addEventListener("click", (e) =>{
+    document.querySelector('#search1').loadData = true;
+  });
+  document.querySelector("#reset").addEventListener("click", (e) =>{
+    document.querySelector('#search1').resetData();
+  });
+  document.querySelector("nasa-image-search").addEventListener("results-changed", (e) =>{
+    console.log(e.detail);
+    document.querySelector("#select").innerHTML = e.detail.value.length;
+  });
+  
+
   </script>
-  <h1>IP look up</h1>
-  <user-ip></user-ip>
-  <user-ip ip="24.48.0.1"></user-ip>
-  <script type="module">
-    // this makes user-ip web component work
-    import {UserIP} from "./src/UserIP.js";
-    // we make an instance of the class
-    const getIPClass = new UserIP();
-    // we wait 100ms and then we ask the class for the user's IP
-    setTimeout(async() => {
-      console.log(await getIPClass.updateUserIP());
-    }, 100);
-  </script>
-  <h1>Location based on IP address as a map</h1>
-  <location-from-ip></location-from-ip>
-  <script type="module">
-    import "./src/LocationFromIP.js";
-  </script>
-  <h1>Example event binding</h1>
-  <script type="module">
-    import {html, render} from "lit";
-    function addIpTag(e) {
-      const userIp = document.createElement("user-ip");
-      document.querySelector("#demo").appendChild(userIp);
-    }
-    render(html`<button @click="${addIpTag}">Call the IP API</button>`, document.querySelector("#demo"));
-  </script>
-  <div id="demo"></div>
+
+
 </body>
 
 </html>

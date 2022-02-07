@@ -13,7 +13,6 @@ export class LocationFromIP extends LitElement {
     super();
     this.UserIpInstance = new UserIP();
     this.locationEndpoint = 'https://freegeoip.app/json/';
-
     this.long = null;
     this.lat = null;
   }
