@@ -91,11 +91,6 @@ class NasaElement extends LitElement {
     `;
   }
 
-  /**
-   *
-   * @todo going over this.getRootNode: can this be the solution or am i just dumb?
-   * possibly both
-   */
   render() {
     return html`
       ${this.view === 'list'
@@ -114,14 +109,12 @@ class NasaElement extends LitElement {
         : html`
             ${this.picture.map(
               item => html`
-                <accent-card
-                  image-src="${item.image}"
-                  page="${item.page}"
-                  description="${item.desc}"
-                  title="${item.title}"
-                  photographer="${item.photographer}"
-                  secondary_creator="${item.secondary}"
-                ></accent-card>
+                <accent-card image-src="${item.image}"> </accent-card>
+                <div slot="heading">${item.title}</div>
+                <div slot="content">${item.desc}</div>
+                <div slot="page">${item.page}</div>
+                <div slot="photographer">${item.photographer}</div>
+                <div slot="secondary_creator">${item.secondary}</div>
               `
             )}
           `}
