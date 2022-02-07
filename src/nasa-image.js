@@ -93,6 +93,11 @@ class NasaElement extends LitElement {
 
   render() {
     return html`
+      <div slot="page">
+        <label for="Page">Page :</label>
+        <input type="number" id="Page" />
+      </div>
+
       ${this.view === 'list'
         ? html`
             <ul>
@@ -112,9 +117,9 @@ class NasaElement extends LitElement {
                 <accent-card image-src="${item.image}"> </accent-card>
                 <div slot="heading">${item.title}</div>
                 <div slot="content">${item.desc}</div>
-                <div slot="page">${item.page}</div>
-                <div slot="photographer">${item.photographer}</div>
-                <div slot="secondary_creator">${item.secondary}</div>
+
+                photographer="${item.photographer}"
+                secondary_creator="${item.secondary}"
               `
             )}
           `}
