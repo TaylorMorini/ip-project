@@ -1,12 +1,15 @@
 import { LitElement, html, css } from 'lit';
 import '@lrnwebcomponents/accent-card';
 
-class NasaElement extends LitElement {
+class NasaSearch extends LitElement {
   constructor() {
     super();
     this.NasaImages = [];
     this.term = '';
     this.page = 1;
+    this.startYear = 2000;
+    this.endYear = 2022;
+    this.listView = false;
   }
 
   static get properties() {
@@ -16,6 +19,10 @@ class NasaElement extends LitElement {
       NasaImages: {
         type: Array,
       },
+      startYear: { type: Number },
+      endYear: { type: Number },
+      listView: { type: Boolean, reflect: true, attribute: 'list-view' },
+      secondary_creator: { type: String, reflect: true },
     };
   }
 
@@ -44,8 +51,7 @@ class NasaElement extends LitElement {
 
   async getNasaData() {
     return fetch(
-      // `https://images-api.nasa.gov/search?media_type=image&q=${this.term}&page=${this.page}`
-      ` https://images-api.nasa.gov/search?q=${this.term}&page=${this.page}`
+      ` https://images-api.nasa.gov/search?q=${this.term}&page=${this.page}&year_start=${this.startYear}&year_end=${this.endYear}`
     )
       .then(resp => {
         if (resp.ok) {
@@ -62,6 +68,7 @@ class NasaElement extends LitElement {
               imagesrc: element.links[0].href,
               title: element.data[0].title,
               description: element.data[0].description,
+              secondary_creator: element.data[0].secondary_creator,
             };
             // console.log(simplifiedInfo);
             this.NasaImages.push(simplifiedInfo);
@@ -88,16 +95,25 @@ class NasaElement extends LitElement {
   }
 
   render() {
-    return html`
-      ${this.NasaImages.map(
-        item => html`
-          <accent-card image-src="${item.imagesrc}">
+    return html`${this.listView === true
+      ? html`
+          <ul>
+            ${this.NasaImages.map(
+              item => html`
+                <li>${item.title}</li>
+                <li>${item.imagesrc}</li>
+                <li>${item.description}</li>
+              `
+            )}
+          </ul>
+        `
+      : html` ${this.NasaImages.map(
+          item => html` <accent-card image-src="${item.imagesrc}">
             <div slot="heading">${item.title}</div>
             <div slot="content">${item.description}</div>
-          </accent-card>
-        `
-      )}
-    `;
+            <div slot="content">${item.secondary_creator}</div>
+          </accent-card>`
+        )}`}`;
   }
 }
-customElements.define('nasa-image-search', NasaElement);
+customElements.define('nasa-image-search', NasaSearch);

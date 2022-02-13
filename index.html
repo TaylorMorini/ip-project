@@ -7,10 +7,13 @@
   <meta name="Description" content="Put your description here.">
   <base href="/">
   <style>
-     
     html,
+    h1{
+      text-align: center;
+    }
+   
+    
     body {
-     
       margin: 0;
       padding: 50px;
       font-family: sans-serif;
@@ -26,61 +29,114 @@
     }
   </style>
   <title>Lab 4/5</title>
- 
+
 </head>
 
+
+
 <body>
+  <section>
   <h1>Search for NASA Images</h1>
   <label>What would you like to search on NASA?</label>
+  <br>
+  <br>
   <input type="text" id="term"></input>
-  <br>
-  <br>
   <button id="button">Search</button>
   <br>
   <br>
-  <label for="page">Page</label>
-  <input id="page" type="text" placeholder= '1'/>
-  <button id ="pageB">Update Page</button>
-  <br>
-  <button id ="prevB">Previous</button>
+  <button id="prevB">Previous</button>
   <button id="nextB">Next</button>
+  <h2>Filter Results</h2>
+  <label for="page">Page</label>
+  <input id="page" type="text" placeholder='1' text-align= "center" maxlength="3" />
+  <br>
+  <br>
+  <label for="startYear">Start year</label>
+   <input id="startYear" type="number" minlength="4" maxlength="4">
+  <br>
+  <br>
+  <label for="endYear">End year</label>
+  <input id="endYear" type="number" minlength="4" maxlength="4">
+  <br>
+  <br>
+  <button id="pageB">Update Page</button>
+  
+   <br>
+   <br>
+   <div>
+    <label for = "readData" class = "label">Return Data Only</label>
+    <input id = "readData" type = "checkbox" />
+   </div>
+
 
   <br>
   <br>
   
+</section>
+
+<section>
+
+</section>
 
 
   <script type="module">
     import "./src/nasa-image.js";
+   
 
     document.querySelector('#button').addEventListener('click', (e) => {
       document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
+      document.querySelector("nasa-image-search").updateTerm(document.querySelector("#startYear").value);
+      document.querySelector("nasa-image-search").updateTerm(document.querySelector("#endYear").value)
       //document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
-     
+
     });
+    document.getElementById('readData').addEventListener('box', e => {
+        e.currentTarget.checked
+          ? (document.querySelector('#images').listOnly = true)
+          : (document.querySelector('#images').listOnly = false);
+      });
+
     document.querySelector('#pageB').addEventListener('click', (e) => {
       document.querySelector('nasa-image-search').page = (document.querySelector('#page').value)
       document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
+      document.querySelector("nasa-image-search").updateTerm(document.querySelector("#startYear").value);
+      document.querySelector("nasa-image-search").updateTerm(document.querySelector("#endYear").value)
     });
     document.querySelector('#nextB').addEventListener('click', (e) => {
-      document.querySelector('nasa-image-search').page = (document.querySelector('#page').value) +=1
+     
+      if (document.querySelector('#page').value <= 1) 
+      {
+        document.querySelector('nasa-image-search').page = (document.querySelector('#page').value) 
+      }
+      if(document.querySelector("#startYear").hasAttribute &&document.querySelector("#endYear").hasAttribute )
+      {document.querySelector("nasa-image-search").updateTerm(document.querySelector("#startYear").value);
+      document.querySelector("nasa-image-search").updateTerm(document.querySelector("#endYear").value)
+      }
       
       document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
     });
     document.querySelector('#prevB').addEventListener('click', (e) => {
-      document.querySelector('nasa-image-search').page = (document.querySelector('#page').value-=1)
-      if(document.querySelector('#page').value < 1)
-      {
-        document.querySelector('nasa-image-search').page =document.querySelector('#page').value = 1;
+      document.querySelector('nasa-image-search').page = (document.querySelector('#page').value -= 1)
+      if (document.querySelector('#page').value < 1) {
+        document.querySelector('nasa-image-search').page = document.querySelector('#page').value = 1;
         document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
       }
+      if(document.querySelector("#startYear").hasAttribute &&document.querySelector("#endYear").hasAttribute )
+      {document.querySelector("nasa-image-search").updateTerm(document.querySelector("#startYear").value);
+      document.querySelector("nasa-image-search").updateTerm(document.querySelector("#endYear").value)
+      }
+      document.querySelector("nasa-image-search").updateTerm(document.querySelector("#startYear").value);
+      document.querySelector("nasa-image-search").updateTerm(document.querySelector("#endYear").value)
       document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
     });
+   
+
 
 
 
   </script>
   <nasa-image-search></nasa-image-search>
+   
 
 </body>
 
