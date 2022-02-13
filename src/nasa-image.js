@@ -1,41 +1,35 @@
 import { LitElement, html, css } from 'lit';
-import '@lrnwebcomponents/accent-card/accent-card.js';
+import '@lrnwebcomponents/accent-card';
 
 class NasaElement extends LitElement {
   constructor() {
     super();
-    this.locationEndpoint =
-      'http://images-api.nasa.gov/search?q=moon%20landing&media_type=image';
-    this.picture = [];
-    this.loadData = false;
-    // coming from accent card
-    this.view = 'card';
+    this.NasaImages = [];
+    this.term = '';
     this.page = 1;
   }
 
   static get properties() {
     return {
-      picture: { type: Array },
-      loadData: {
-        type: Boolean,
-        reflect: true,
-        attribute: 'load-data',
-      },
+      term: { type: String, reflect: true },
       page: { type: Number, reflect: true },
-      view: { type: String, reflect: true },
+      NasaImages: {
+        type: Array,
+      },
     };
   }
 
   updated(changedProperties) {
-    // try to get involved with picture
     changedProperties.forEach((oldValue, propName) => {
-      if (propName === 'loadData' && this[propName]) {
-        this.getData();
-      } else if (propName === 'picture') {
+      if (propName === 'term' && this[propName]) {
+        this.getNasaData();
+      } else if (propName === 'NasaImages') {
+        this.render();
+      } else if (propName === 'NasaImages') {
         this.dispatchEvent(
           new CustomEvent('results-changed', {
             detail: {
-              value: this.picture,
+              value: this.NasaImages,
             },
           })
         );
@@ -43,9 +37,15 @@ class NasaElement extends LitElement {
     });
   }
 
-  getData(picture) {
-    fetch(
-      `https://images-api.nasa.gov/search?q=${this.name}&media_type=image&page=${this.page}`
+  updateTerm(value) {
+    this.term = value;
+    this.getNasaData();
+  }
+
+  async getNasaData() {
+    return fetch(
+      // `https://images-api.nasa.gov/search?media_type=image&q=${this.term}&page=${this.page}`
+      ` https://images-api.nasa.gov/search?q=${this.term}&page=${this.page}`
     )
       .then(resp => {
         if (resp.ok) {
@@ -54,29 +54,23 @@ class NasaElement extends LitElement {
         return false;
       })
       .then(data => {
-        console.log(data);
-        this.picture = [];
+        this.NasaImages = [];
 
-        for (let i = 0; i < picture.length; i += 1) {
-          const eventInfo = {
-            page: data[i].page,
-            desc: data[i].description,
-            title: data[i].title,
-            photographer: data[i].photographer,
-            secondary: data[i].secondary_creator,
-          };
-          this.picture.push(eventInfo);
-          console.log(eventInfo);
-        }
+        data.collection.items.forEach(element => {
+          if (element.links[0].href !== undefined) {
+            const simplifiedInfo = {
+              imagesrc: element.links[0].href,
+              title: element.data[0].title,
+              description: element.data[0].description,
+            };
+            // console.log(simplifiedInfo);
+            this.NasaImages.push(simplifiedInfo);
+          }
+        });
+        return data;
       });
   }
 
-  resetData() {
-    this.picture = [];
-    this.loadData = false;
-  }
-
-  // performing a search: GET /search?q={q}
   static get styles() {
     return css`
       :host {
@@ -84,7 +78,9 @@ class NasaElement extends LitElement {
         border: 2px solid black;
         min-height: 100px;
       }
-
+      date-card {
+        display: inline-flex;
+      }
       :host([view='list']) ul {
         margin: 20px;
       }
@@ -93,38 +89,15 @@ class NasaElement extends LitElement {
 
   render() {
     return html`
-      <div slot="page">
-        <label for="Page">Page :</label>
-        <input type="number" id="Page" />
-      </div>
-
-      ${this.view === 'list'
-        ? html`
-            <ul>
-              ${this.picture.map(
-                item => html`
-                  <li>
-                    ${item.image} - ${item.page} - ${item.desc} - ${item.title}
-                    - ${item.photographer} - ${item.secondary}
-                  </li>
-                `
-              )}
-            </ul>
-          `
-        : html`
-            ${this.picture.map(
-              item => html`
-                <accent-card image-src="${item.image}"> </accent-card>
-                <div slot="heading">${item.title}</div>
-                <div slot="content">${item.desc}</div>
-
-                photographer="${item.photographer}"
-                secondary_creator="${item.secondary}"
-              `
-            )}
-          `}
+      ${this.NasaImages.map(
+        item => html`
+          <accent-card image-src="${item.imagesrc}">
+            <div slot="heading">${item.title}</div>
+            <div slot="content">${item.description}</div>
+          </accent-card>
+        `
+      )}
     `;
   }
 }
-
 customElements.define('nasa-image-search', NasaElement);

@@ -1,42 +1,86 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="Description" content="Put your description here.">
   <base href="/">
   <style>
+     
     html,
     body {
+     
       margin: 0;
       padding: 50px;
       font-family: sans-serif;
     }
 
+    nasa-image-search {
+      background-color: white;
+    }
+
+    nasa-image-search[load-data] {
+      background-color: lightblue;
+      transition: 1s ease-in-out background-color;
+    }
   </style>
-  <title>NASA Image Search</title>
+  <title>Lab 4/5</title>
+ 
 </head>
 
 <body>
+  <h1>Search for NASA Images</h1>
+  <label>What would you like to search on NASA?</label>
+  <input type="text" id="term"></input>
+  <br>
+  <br>
+  <button id="button">Search</button>
+  <br>
+  <br>
+  <label for="page">Page</label>
+  <input id="page" type="text" placeholder= '1'/>
+  <button id ="pageB">Update Page</button>
+  <br>
+  <button id ="prevB">Previous</button>
+  <button id="nextB">Next</button>
 
-  <h1>NASA Image Search</h1>
-  <nasa-image-search id ="search1" view ="list"></nasa-image-search>
-  <button id = "search">Search Images</button>
-  <button id = "reset">Reset Data</button>
+  <br>
+  <br>
+  
+
+
   <script type="module">
     import "./src/nasa-image.js";
 
-    document.querySelector("#search").addEventListener("click", (e) =>{
-    document.querySelector('#search1').loadData = true;
-  });
-  document.querySelector("#reset").addEventListener("click", (e) =>{
-    document.querySelector('#search1').resetData();
-  });
-  document.querySelector("nasa-image-search").addEventListener("results-changed", (e) =>{
-    console.log(e.detail);
-    document.querySelector("#select").innerHTML = e.detail.value.length;
-  });
+    document.querySelector('#button').addEventListener('click', (e) => {
+      document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
+      //document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
+     
+    });
+    document.querySelector('#pageB').addEventListener('click', (e) => {
+      document.querySelector('nasa-image-search').page = (document.querySelector('#page').value)
+      document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
+    });
+    document.querySelector('#nextB').addEventListener('click', (e) => {
+      document.querySelector('nasa-image-search').page = (document.querySelector('#page').value) +=1
+      
+      document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
+    });
+    document.querySelector('#prevB').addEventListener('click', (e) => {
+      document.querySelector('nasa-image-search').page = (document.querySelector('#page').value-=1)
+      if(document.querySelector('#page').value < 1)
+      {
+        document.querySelector('nasa-image-search').page =document.querySelector('#page').value = 1;
+        document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
+      }
+      document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
+    });
+
+
+
   </script>
+  <nasa-image-search></nasa-image-search>
 
 </body>
 
