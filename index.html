@@ -56,16 +56,26 @@
   <section>
     <h1>Search for NASA Images</h1>
     <h3>What would you like to search on NASA?</h3>
+    <label for="term">Search</label>
+    <br>
+    <br>
     <input type="text" id="term"></input>
     <button id="button">Search</button>
     <br>
     <br>
     <h2>Filter Results</h2>
+    <label for ="page">Page Number</label>
+    <br>
     <input id="page" type="text" placeholder='Page 1' text-align="center" maxlength="3" />
     <br>
     <br>
+    <br>
+    <label for= "startYear">Start Year</label>
+    <br>
     <input id="startYear" type="number" placeholder="Start Year" minlength="4" maxlength="4">
     <br>
+    <br>
+    <label for="endYear">End Year</label>
     <br>
     <input id="endYear" type="number" placeholder="End Year" minlength="4" maxlength="4">
     <br>
@@ -81,6 +91,7 @@
     <div>
       <label for="readData" class="label">Return Data Only</label>
       <input id="readData" type="checkbox" />
+ 
     </div>
     <br>
 
@@ -95,21 +106,22 @@
 
   <script type="module">
     import "./src/nasa-image.js";
-
+    document.getElementById('readData').addEventListener('click', e => {
+        e.currentTarget.checked
+          ? (document.querySelector('#images').listOnly = true)
+          : (document.querySelector('#images').listOnly = false);
+      });
 
     document.querySelector('#button').addEventListener('click', (e) => {
       document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
       document.querySelector("nasa-image-search").updateTerm(document.querySelector("#startYear").value);
       document.querySelector("nasa-image-search").updateTerm(document.querySelector("#endYear").value)
       //document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
+      
 
     });
-    document.getElementById('readData').addEventListener('box', e => {
-      e.currentTarget.checked
-        ? (document.querySelector('#images').listOnly = true)
-        : (document.querySelector('#images').listOnly = false);
-    });
 
+   
     document.querySelector('#pageB').addEventListener('click', (e) => {
       document.querySelector('nasa-image-search').page = (document.querySelector('#page').value)
       document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
@@ -142,7 +154,8 @@
       document.querySelector('nasa-image-search').updateTerm(document.querySelector('#term').value)
     });
 
-
+   
+      
 
 
 

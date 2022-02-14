@@ -103,6 +103,7 @@ class NasaSearch extends LitElement {
                 <li>${item.title}</li>
                 <li>${item.imagesrc}</li>
                 <li>${item.description}</li>
+                <li>${item.secondary_creator}</li>
               `
             )}
           </ul>
@@ -111,7 +112,7 @@ class NasaSearch extends LitElement {
           item => html` <accent-card image-src="${item.imagesrc}">
             <div slot="heading">${item.title}</div>
             <div slot="content">${item.description}</div>
-            <div slot="content">${item.secondary_creator}</div>
+            <div>${item.secondary_creator}</div>
           </accent-card>`
         )}`}`;
   }
